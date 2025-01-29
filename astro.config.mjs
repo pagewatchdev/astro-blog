@@ -4,7 +4,7 @@ import sitemap from '@astrojs/sitemap'
 import tailwind from '@astrojs/tailwind'
 import { remarkReadingTime } from './src/utils/readTime.ts'
 import { siteConfig } from './src/data/site.config'
-
+import vue from '@astrojs/vue';
 // https://astro.build/config
 export default defineConfig({
 	site: siteConfig.site,
@@ -29,6 +29,7 @@ export default defineConfig({
 			drafts: true
 		}),
 		sitemap(),
-		tailwind()
+		tailwind(),
+		vue()
 	]
 })

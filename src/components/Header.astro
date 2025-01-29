@@ -5,10 +5,11 @@ import Search from '@/components/Search'
 import TagIcon from './icons/TagIcon.astro'
 import ToggleTheme from './ToggleTheme.astro'
 import { SOCIALNETWORKS } from '@/data/links'
+import GooglyEyes from './vue/GooglyEyes.vue'
 ---
 
 <header class='relative flex items-center h-12 font-semibold'>
-	<a class='text-lg mr-auto' href='/'>PageWatch.ai</a>
+	<a class='text-lg mr-auto' href='/'><GooglyEyes size='30px' showLogo client:load /></a>
 
 	<div
 		id='astro-header-drawer'
