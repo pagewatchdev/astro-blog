@@ -9,7 +9,7 @@ import vue from '@astrojs/vue';
 export default defineConfig({
 	site: siteConfig.site,
 	  base: '/blog/',
-	// outDir: '../dashboard/public/blog',
+	outDir: 'dist/blog',
 	markdown: {
 		remarkPlugins: [remarkReadingTime],
 		drafts: true,
