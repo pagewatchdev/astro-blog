@@ -8,6 +8,8 @@ import vue from '@astrojs/vue';
 // https://astro.build/config
 export default defineConfig({
 	site: siteConfig.site,
+	  base: '/blog/',
+	outDir: '../dashboard/public/blog',
 	markdown: {
 		remarkPlugins: [remarkReadingTime],
 		drafts: true,
