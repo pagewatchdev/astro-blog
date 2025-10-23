@@ -1,6 +1,6 @@
 ---
 heroImage: ../../assets/images/favicon.png
-category: Category 1
+category: Scraping
 description: >-
   The new MacBook Pro 2022 is here. With the Apple M2 chip, a new design, and
   more, the new MacBook Pro is the best laptop Apple has ever mades.
@@ -60,18 +60,6 @@ const name = 'Astro'
 caution
 HTML attributes will be converted to strings, so it is not possible to pass functions and objects to HTML elements.
 For example, you can't assign an event handler to an HTML element in an Astro component:
-
-```astro
----
-// dont-do-this.astro
-function handleClick() {
-	console.log('button clicked!')
-}
----
-
-<!-- ❌ This doesn't work! ❌ -->
-<button onClick={handleClick}>Nothing will happen when you click me!</button>
-```
 
 Instead, use a client-side script to add the event handler, like you would in vanilla JavaScript:
 
