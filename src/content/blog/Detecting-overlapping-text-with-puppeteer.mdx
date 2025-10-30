@@ -1,11 +1,100 @@
 ---
 heroImage: /src/assets/images/favicon.png
-category: Puppeteer
-description: How to detect overlapping text with puppeteer
-pubDate: 2025-01-29T22:00:00.000Z
+category: AI
+description: 'Reducing LLM token usage with images instead of text '
+pubDate: 2025-10-27T22:00:00.000Z
 tags:
-  - javascript
-title: Detecting overlapping text with puppeteer
+  - a
+title: Can you save on LLM tokens using images instead of text?
 ---
 
-Overlapping text can severely impact the readability of a site
+> TLDR: Converting your text prompts to an image before sending to OpenAI can reduce token usage, but there are some quirks.
+
+A [recent discussion](https://news.ycombinator.com/item?id=45658928) from Karpathy about the pixel inputs instead of text made the think of a something curious I noticed when running prompts with the OpenAI api - The prompts that uses images as input uses almost the same amount of tokens as those that use text, even though the images could easily be 50x the size of the text.
+
+This made me think, could you actually save on tokens by converting your text to an image, and sending that to the api?
+
+## Setting up an experiment
+
+For the prompt I'm going to ask ChatGPT to pick out and summarize the information from [this post on digital hygiene](https://karpathy.bearblog.dev/digital-hygiene/) from Karpathy. It should be something LLM's are good at, but there is also a clear correct answer so its easy to check.
+
+The prompt is simply the following:
+
+```
+List every hygiene tip from the collection, with a short sentence summary.
+List the titles * EXACTLY * as in the text
+Follow the following format:
+** Title 1 ** - summary 1
+** Title 2 ** - summary 2
+DO NOT ask any followup questions, simply return the list.
+```
+
+### Baseline token usage
+
+To run the prompt extracted the text-only version of the blogpost (skipping the headers and image), and fed it to gpt-5-chat-latest (more on that choice later)
+
+```
+**Password manager** - Use a password manager to store and generate unique passwords to prevent reuse and leaks across services.
+**Hardware security key** - Strengthen your accounts with physical security keys like YubiKeys for superior protection against attacks and SIM swaps.
+**Biometrics** - Use biometric authentication, such as FaceID, as an additional factor of security where available.
+**Security questions** - Avoid traditional security questions; use random passwords instead to prevent easy guessing or phishing.
+.. etc
+
+```
+
+Running it a few times the token usage seems to average out at about 1200 input tokens and 1000 output tokens.
+
+PROMPT_TOKENS=2300, COMPLETION_TOKENS=441
+
+### Converting the post to an image
+
+When creating the image we need to be careful to get the dimensions right, otherwise OpenAI will resize the image, and the LLM wont be able to make out any text.
+
+Looking through their [documentation](https://platform.openai.com/docs/guides/images-vision?api-mode=responses), the ideal size seems to be 768x768, so I wrote a basic puppeteer script to convert the post to an image with these dimensions.
+
+```javascript
+import puppeteer from 'puppeteer'
+const html = 'PAGE_CONTENT' // the post content
+const pageContent = `
+<html>
+<body style="font-family: 'Verdana';background:white;padding:1px;font-size:9px;max-width: 768px">
+${html}
+</body>
+</html>
+`
+const browser = await puppeteer.launch({ headless: 'new' })
+const page = await browser.newPage()
+await page.setViewport({ width: 768, height: 768 })
+await page.setContent(pageContent)
+await page.screenshot({
+	path: 'screenshot1.png',
+	clip: { x: 0, y: 0, width: 768, height: 762 }
+})
+await page.screenshot({
+	path: 'screenshot2.png',
+	clip: { x: 0, y: 762, width: 768, height: 768 }
+})
+browser.close()
+```
+
+You can see the resulting image here and here.
+
+PROMPT_TOKENS=1333, COMPLETION_TOKENS=351
+
+gpt-5-mini
+
+text: PROMPT_TOKENS=2299, COMPLETION_TOKENS=1474, PROMPT_TOKENS=2299, COMPLETION_TOKENS=1114
+
+image: PROMPT_TOKENS=1458, COMPLETION_TOKENS=1650, PROMPT_TOKENS=1458, COMPLETION_TOKENS=1608
+
+gpt-5
+
+text: PROMPT_TOKENS=2299, COMPLETION_TOKENS=1476, PROMPT_TOKENS=2299, COMPLETION_TOKENS=2855, PROMPT_TOKENS=2299, COMPLETION_TOKENS=1580
+
+image: PROMPT_TOKENS=1332, COMPLETION_TOKENS=2357, PROMPT_TOKENS=1332, COMPLETION_TOKENS=1718
+
+### Baseline token usage
+
+## Using images as input
+
+![](/src/assets/images/screenshot1.png)

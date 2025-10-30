@@ -4,17 +4,17 @@ import sitemap from '@astrojs/sitemap'
 import tailwind from '@astrojs/tailwind'
 import { remarkReadingTime } from './src/utils/readTime.ts'
 import { siteConfig } from './src/data/site.config'
-import vue from '@astrojs/vue';
+import vue from '@astrojs/vue'
 // https://astro.build/config
 export default defineConfig({
 	site: siteConfig.site,
-	  base: '/blog/',
+	base: '/blog/',
 	outDir: 'dist/blog',
 	markdown: {
 		remarkPlugins: [remarkReadingTime],
 		drafts: true,
 		shikiConfig: {
-			theme: 'material-theme-palenight',
+			theme: 'dracula',
 			wrap: true
 		}
 	},
@@ -22,10 +22,7 @@ export default defineConfig({
 		mdx({
 			syntaxHighlight: 'shiki',
 			shikiConfig: {
-				experimentalThemes: {
-					light: 'vitesse-light',
-					dark: 'material-theme-palenight',
-				  },
+				theme: 'dracula',
 				wrap: true
 			},
 			drafts: true

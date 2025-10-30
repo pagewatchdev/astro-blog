@@ -9,8 +9,13 @@
 
 	.prose code {
 		@apply text-base;
+        font-size: 12px;
 	}
 
+    pre{
+        max-height: 300px;
+        line-height: 1 !important;
+    }
 	/* prose styles here */
 	.prose h1,
 	h2,
