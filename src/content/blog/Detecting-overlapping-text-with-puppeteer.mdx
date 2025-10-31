@@ -1,7 +1,7 @@
 ---
 heroImage: /src/assets/images/favicon.png
 category: AI
-description: 'Reducing LLM token usage with images instead of text '
+description: 'What happens if you convert your prompts to an image before running?'
 pubDate: 2025-10-27T22:00:00.000Z
 tags:
   - a
@@ -48,7 +48,7 @@ The next step is to run the prompt on the image instead of text.
 
 ### Converting the prompt to an image
 
-When creating the image we need to be careful to get the dimensions right, otherwise OpenAI will resize the image and it wont be able to make out any text.
+When creating the image we need to be careful to get the dimensions right, otherwise OpenAI will resize the image and won't be able to make out any text.
 
 Looking through their [documentation](https://platform.openai.com/docs/guides/images-vision?api-mode=responses), the ideal size seems to be 768x768, so I wrote a [basic puppeteer script](https://gist.github.com/lpellis/f7064bee73ce4a3c22aebea819f2665a) to convert the post to an image with these dimensions.
 
@@ -66,7 +66,7 @@ When running the prompt, you have to specify both images with "detail": "high"
     },
 ```
 
-This worked just fine, and the output was similar to using the text-based prompts.
+This actually worked perfectly, and the output was similar to using the text-based prompts.
 
 ## The Results
 
@@ -84,7 +84,7 @@ Running the prompt 5 times with each model and taking the average, we see the fo
 
 ![](/blog/images/completion-tokens.png)
 
-There is no real difference with gpt-5-chat, but all the **other models use significantly more completion tokens with the image inputs**. My guess is the difference is due to reasoning tokens that might work differently with image inputs.
+There is no real difference with gpt-5-chat, but all the **other models use significantly more completion tokens with the image inputs**. This is probably due to reasoning tokens that work differently with image inputs.
 
 Completion tokens are also significantly more expensive, so unless you use the chat model, you are not getting any savings.
 
