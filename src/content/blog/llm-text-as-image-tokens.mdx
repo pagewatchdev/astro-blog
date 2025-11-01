@@ -10,7 +10,7 @@ title: Can you save on LLM tokens using images instead of text?
 
 > TLDR: Yes, but only under specific conditions, and it is probably not worth the trade-offs.
 
-The [recent OCR paper from DeepSeek](https://arxiv.org/abs/2510.18234) and the [related discussion](https://news.ycombinator.com/item?id=45658928) reminded me of something curious I noticed with the OpenAI api - Prompts that use images as input consume almost the same number of tokens as those that use text, even though the images could be 50x the size of the text.
+The [recent OCR paper from DeepSeek](https://arxiv.org/abs/2510.18234) and the [related discussion](https://news.ycombinator.com/item?id=45658928) reminded me of something curious I noticed with the OpenAI API - Prompts that use images as input consume almost the same number of tokens as those that use text, even though the images could be 50x the size of the text.
 
 This made me think, could you actually save on tokens by converting your text to an image and sending that to the api?
 
@@ -18,7 +18,7 @@ This made me think, could you actually save on tokens by converting your text to
 
 To test the theory, I ran a simple prompt using both text only and an image-based one.
 
-For the prompt I'm asking ChatGPT to pick out and summarize the information from [this post on digital hygiene](https://karpathy.bearblog.dev/digital-hygiene/) from Karpathy. It should be something LLM's are good at, but there is also a clear correct answer so its easy to check.
+For the prompt I'm asking ChatGPT to pick out and summarize the information from [this post by Karpathy on digital hygiene](https://karpathy.bearblog.dev/digital-hygiene/). It should be something LLM's are good at, but there is also a clear correct answer so its easy to check.
 
 The prompt is simply the following:
 
@@ -70,7 +70,7 @@ This actually worked perfectly, and the output was similar to using the text-bas
 
 ## The Results
 
-Running the prompt with a few different models, we can see there are indeed significant saving in prompt tokens, the biggest seems to be with gpt-5 and gpt-5-chat.
+Running the prompt with a few different models, we can see there is indeed a significant saving in prompt tokens.
 
 ![](/blog/images/prompt-tokens.png)
 
@@ -84,11 +84,6 @@ Running the prompt 5 times with each model and taking the average, we see the fo
 
 ![](/blog/images/completion-tokens.png)
 
-There is no real difference with gpt-5-chat, but all the **other models use significantly more completion tokens with the image inputs**. This is probably due to reasoning tokens that work differently with image inputs.
+**All models apart from gpt-5-chat use significantly more completion tokens with the image inputs**.
 
 Completion tokens are also significantly more expensive, so unless you use the chat model, you are not getting any savings.
-
-## Conclusion
-
-At least with gpt-5-chat you can indeed reduce token usage by converting your prompts to an image.
-However, it is very easy to accidentally send an image that the LLM cannot reliably read (either due to OpenAI resizing the image, or the font not being a good choice, etc). In these cases the LLM will hallucinate wildly, and its not always easy to catch these errors.
