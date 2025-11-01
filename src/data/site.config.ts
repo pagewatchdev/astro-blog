@@ -10,7 +10,7 @@ interface SiteConfig {
 }
 
 export const siteConfig: SiteConfig = {
-	site: 'http://localhost:5174/blog/', // Write here your website url
+	site: 'https://pagewatch.ai/', // Write here your website url
 	author: 'PageWatch', // Site author
 	title: 'PageWatch Blog', // Site title.
 	description: 'PageWatch Blog', // Description to display in the meta tags
